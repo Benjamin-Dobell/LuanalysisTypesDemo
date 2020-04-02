@@ -74,3 +74,12 @@ local anyValue
 local tableWithoutEntries = {}
 
 anyValue = tableWithoutEntries.keyThatDoesNotExist -- Expect error
+
+stringArray = {}
+numberArray = {}
+numberNumberTable = {}
+numberStringTable = {}
+explicitUnknown = {}
+implicitUnknown = {}
+explictlyTypedLiteral = {} -- Expect error
+wantsNumberNumberTable({})
