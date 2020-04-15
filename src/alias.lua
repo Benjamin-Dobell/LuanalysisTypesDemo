@@ -14,3 +14,20 @@ classToBeAliased = 1 -- Expect error
 
 myAlias = classToBeAliased
 myAlias = 1 -- Expect error
+
+---@alias UnionAlias string|ClassToBeAliased
+
+---@type string
+local aString
+
+---@type UnionAlias
+local unionAlias
+
+unionAlias = aString
+aString = unionAlias -- Expect error
+
+unionAlias = classToBeAliased
+classToBeAliased = unionAlias -- Expect error
+
+unionAlias = myAlias
+myAlias = unionAlias -- Expect error

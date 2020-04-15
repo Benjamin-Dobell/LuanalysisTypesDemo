@@ -65,8 +65,6 @@ SelfA.lambdaMethod = function()
     aNumber = self.a -- Expect error
     aString = self.a
 
-    end
-
     return self
 end
 

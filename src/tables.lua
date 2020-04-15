@@ -14,11 +14,31 @@ local numberNumberTable
 ---@type table<number, string>
 local numberStringTable
 
+---@type table<string, string>
+local stringStringTable
+
 ---@type number[]
 local numberArray
 
 ---@type string[]
 local stringArray
+
+numberNumberTable[1] = 1
+numberNumberTable[1] = "a string" -- Expect error
+
+numberStringTable[1] = 1 -- Expect error
+numberStringTable[1] = "a string"
+
+numberArray[1] = 1
+numberArray[1] = "a string" -- Expect error
+
+stringArray[1] = 1 -- Expect error
+stringArray[1] = "a string"
+
+stringStringTable['a'] = 'a string'
+stringStringTable['a'] = 1 -- Expect error
+stringStringTable.a = 'a string'
+stringStringTable.a = 1 -- Expect error
 
 numberNumberTable = numberArray
 numberNumberTable = stringArray -- Expect error
