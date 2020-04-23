@@ -1,4 +1,5 @@
 ---@class LambdaClass
+---@overload fun(a: number): self
 local LambdaClass = {}
 
 setmetatable(LambdaClass,  {
@@ -8,18 +9,19 @@ setmetatable(LambdaClass,  {
 
         ---@return number
         function self.getNumber()
-            return 1
+            return a
         end
 
         return self
     end
 })
 
-local lambdaClass = LambdaClass()
+local missingArg = LambdaClass() -- Expect error
+local wrongArg = LambdaClass("one") -- Expect error
+local lambdaClass = LambdaClass(1)
 
 ---@type number
 local aNumber = lambdaClass.getNumber()
 
 ---@type string
 local aString = lambdaClass.getNumber() -- Expect error
-

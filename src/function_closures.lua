@@ -80,3 +80,15 @@ local closureInternalTypeInspections = function(param)
         return 1 -- Expect error
     end
 end
+
+local something = {
+    ---@param a boolean
+    ---@param b string
+    tableFun = function(a, b)
+        aBoolean = a
+        aString = a -- Expect error
+
+        aBoolean = b -- Expect error
+        aString = b
+    end
+}

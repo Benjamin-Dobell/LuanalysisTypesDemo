@@ -103,3 +103,25 @@ explicitUnknown = {}
 implicitUnknown = {}
 explictlyTypedLiteral = {} -- Expect error
 wantsNumberNumberTable({})
+
+---@type number
+local thing
+
+---@return table<'a', 1>
+local function returnSpecificTable()
+    if thing == 1 then
+        local anonymousTable1 = {}
+        anonymousTable1.a = 1
+        return anonymousTable1
+    elseif thing == 2 then
+        local anonymousTable2 = {}
+        anonymousTable2.a = 2
+        return anonymousTable2 -- Expect error
+    elseif thing == 3 then
+        local anonymousTable3 = {}
+        anonymousTable3.b = 1
+        return anonymousTable3 -- Expect error
+    else
+        return {}
+    end
+end

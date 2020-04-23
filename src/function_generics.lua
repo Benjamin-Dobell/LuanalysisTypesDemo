@@ -255,3 +255,145 @@ local function fn10()
     local function fn10Nested(arg)
     end
 end
+
+
+---@type fun<K, V>(tab: table<K, V>, func: fun(key: K, value: V))
+local fn11
+
+-- K = 1|2,
+fn11({a = 1, b = 2}, function(key, value)
+    anyString = key
+    anyNumber = key -- Expect error
+    anyString = value -- Expect error
+    anyNumber = value
+end)
+
+fn11(stringNumberTable, function(key, value)
+    anyString = key
+    anyNumber = key -- Expect error
+    anyString = value -- Expect error
+    anyNumber = value
+end)
+
+fn11({a = "a", b = "b"}, function(key, value)
+    anyString = key
+    anyNumber = key -- Expect error
+    anyString = value
+    anyNumber = value -- Expect error
+end)
+
+fn11(stringStringTable, function(key, value)
+    anyString = key
+    anyNumber = key -- Expect error
+    anyString = value
+    anyNumber = value -- Expect error
+end)
+
+fn11({[1] = "a", [2] = "b"}, function(key, value)
+    anyString = key -- Expect error
+    anyNumber = key
+    anyString = value
+    anyNumber = value -- Expect error
+end)
+
+fn11({"a", "b"}, function(key, value)
+    anyString = key
+    anyNumber = key -- Expect error
+    anyString = value
+    anyNumber = value -- Expect error
+end)
+
+fn11(numberArray, function(key, value)
+    anyString = key -- Expect error
+    anyNumber = key
+    anyString = value -- Expect error
+    anyNumber = value
+end)
+
+
+---@type 1
+local one
+
+---@type 3
+local three
+
+
+---@generic K, V
+---@param a table<K, V>
+---@param b table<K, V>
+---@return table<K, V>
+local function merge(a, b)
+    ---@type table<K, V>
+    local res
+
+    return res
+end
+
+local mergedLiteralArr = merge({1, 2}, {3, 4})
+local mergedLiteralMap = merge({a = 1, b = 2}, {c = 3, d = 4})
+
+mergedLiteralArr[1] = one
+mergedLiteralArr[1] = three
+mergedLiteralArr[1] = 5 -- Expect error
+
+mergedLiteralMap.a = one
+mergedLiteralMap.a = three
+mergedLiteralMap.a = 5 -- Expect error
+
+mergedLiteralMap.e = one -- Expect error
+
+local mergedStringStringMap = merge(stringStringTable, stringStringTable)
+
+mergedStringStringMap.a = "a string"
+mergedStringStringMap.a = 1 -- Expect error
+mergedStringStringMap['a'] = "a string"
+mergedStringStringMap['a'] = 1 -- Expect error
+
+
+---@type fun<K, V>(a: table<K, V>, b: table<K, V>): table<K, V>
+local typeMerge
+
+local typeMergedLiteralArr = typeMerge({1, 2}, {3, 4})
+local typeMergedLiteralMap = typeMerge({a = 1, b = 2}, {c = 3, d = 4})
+
+typeMergedLiteralArr[1] = one
+typeMergedLiteralArr[1] = three
+typeMergedLiteralArr[1] = 5 -- Expect error
+
+typeMergedLiteralMap.a = one
+typeMergedLiteralMap.a = three
+typeMergedLiteralMap.a = 5 -- Expect error
+
+typeMergedLiteralMap.e = one -- Expect error
+
+local typeMergedStringStringMap = typeMerge(stringStringTable, stringStringTable)
+
+typeMergedStringStringMap.a = "a string"
+typeMergedStringStringMap.a = 1 -- Expect error
+typeMergedStringStringMap['a'] = "a string"
+typeMergedStringStringMap['a'] = 1 -- Expect error
+
+
+---@overload fun<K, V>(a: table<K, V>, b: table<K, V>): table<K, V>
+local function overloadMerge(a, b)
+end
+
+local overloadMergedLiteralArr = overloadMerge({1, 2}, {3, 4})
+local overloadMergedLiteralMap = overloadMerge({a = 1, b = 2}, {c = 3, d = 4})
+
+overloadMergedLiteralArr[1] = one
+overloadMergedLiteralArr[1] = three
+overloadMergedLiteralArr[1] = 5 -- Expect error
+
+overloadMergedLiteralMap.a = one
+overloadMergedLiteralMap.a = three
+overloadMergedLiteralMap.a = 5 -- Expect error
+
+overloadMergedLiteralMap.e = one -- Expect error
+
+local overloadMergedStringStringMap = overloadMerge(stringStringTable, stringStringTable)
+
+overloadMergedStringStringMap.a = "a string"
+overloadMergedStringStringMap.a = 1 -- Expect error
+overloadMergedStringStringMap['a'] = "a string"
+overloadMergedStringStringMap['a'] = 1 -- Expect error
