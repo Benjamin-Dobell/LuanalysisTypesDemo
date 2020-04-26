@@ -20,3 +20,16 @@ local stringLiteralOrNumber
 stringOrNumberVar = stringLiteralOrNumber
 
 stringLiteralOrNumber = stringOrNumberVar -- Expect error as string is not a subtype of "hi" (a string literal).
+
+---@type table<string, "A" | "B">
+local aOrB
+
+---@type table<string, "B" | "A">
+local bOrA
+
+---@type table<string, "A" | "C">
+local aOrC
+
+aOrB = bOrA
+bOrA = aOrB
+aOrB = aOrC -- Expect error
