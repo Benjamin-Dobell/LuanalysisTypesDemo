@@ -28,9 +28,11 @@ numberNumberTable[1] = "a string" -- Expect error
 
 numberStringTable[1] = 1 -- Expect error
 numberStringTable[1] = "a string"
+numberStringTable[1] = nil
 
 numberArray[1] = 1
 numberArray[1] = "a string" -- Expect error
+numberArray[1] = nil -- Expect error
 
 stringArray[1] = 1 -- Expect error
 stringArray[1] = "a string"
