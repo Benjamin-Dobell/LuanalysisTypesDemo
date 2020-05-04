@@ -397,3 +397,16 @@ overloadMergedStringStringMap.a = "a string"
 overloadMergedStringStringMap.a = 1 -- Expect error
 overloadMergedStringStringMap['a'] = "a string"
 overloadMergedStringStringMap['a'] = 1 -- Expect error
+
+
+---@overload fun<T : number>(value: T): void
+---@generic T : string
+---@param optional number
+---@param value T
+local function overloadedT(value, optional) end
+
+overloadedT(1)
+overloadedT("string") -- Expect error
+
+overloadedT(1, 1) -- Expect error
+overloadedT("string", 1)
