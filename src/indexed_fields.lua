@@ -63,3 +63,15 @@ aNumber = literalTable[1] -- Expect error
 
 aBoolean = literalTable[2] -- Expect error
 aNumber = literalTable[2]
+
+---@alias OneOrTwo 1|2
+---@alias OneOrFour 1|4
+
+---@type OneOrTwo
+local oneOrTwo
+
+---@type OneOrFour
+local oneOrFour
+
+aNumber = vector[oneOrTwo]
+aNumber = vector[oneOrFour] -- Expect error
