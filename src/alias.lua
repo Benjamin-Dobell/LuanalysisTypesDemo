@@ -39,3 +39,9 @@ local aliasedFunction
 
 aliasedFunction(1) -- Expect error
 aliasedFunction("okay")
+
+---@type fun(a: MyAlias, b: MyAlias): void
+local myAliasFun
+
+myAliasFun(classToBeAliased, 1) -- Expect error
+myAliasFun(classToBeAliased, classToBeAliased)
