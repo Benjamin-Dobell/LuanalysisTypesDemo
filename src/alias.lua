@@ -31,3 +31,11 @@ classToBeAliased = unionAlias -- Expect error
 
 unionAlias = myAlias
 myAlias = unionAlias -- Expect error
+
+---@alias AliasedFunction fun(a: string): void
+
+---@type AliasedFunction
+local aliasedFunction
+
+aliasedFunction(1) -- Expect error
+aliasedFunction("okay")
