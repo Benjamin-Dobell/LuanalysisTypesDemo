@@ -122,3 +122,46 @@ shapeWithOptionalField = {
     requiredField = 1,
     optional = aString -- Expect error
 }
+
+---@shape ArrayValue
+---@field a number
+
+---@shape WithArrayValues
+---@field values ArrayValue[]
+
+---@type WithArrayValues
+local goodLiteral = {
+    values = {
+        {
+            a = 1
+        }
+    }
+}
+
+---@type WithArrayValues
+local badLiteral = {
+    values = {
+        {
+            a = "some string" -- Expect error
+        }
+    }
+}
+
+local goodAnonymous = {
+    values = {
+        {
+            a = 1
+        }
+    }
+}
+
+local badAnonymous = {
+    values = {
+        {
+            a = "some string"
+        }
+    }
+}
+
+goodLiteral = goodAnonymous
+goodLiteral = badAnonymous -- Expect error

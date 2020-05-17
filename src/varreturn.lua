@@ -70,3 +70,11 @@ aNumber = implicitNumber1
 aBoolean = implicitNumber1 -- Expect error
 aNumber = implicitNumber2
 aBoolean = implicitNumber2 -- Expect error
+
+---@return 1, 2, 3
+local function returns123()
+    return 1, 2, 3
+end
+
+---@type number[]
+local numberArray = {returns123()}

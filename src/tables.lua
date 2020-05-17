@@ -127,3 +127,19 @@ local function returnSpecificTable()
         return {}
     end
 end
+
+---@type string
+local aString
+
+---@type table<string, {aNumber: number}>
+local tableLiteralWithNonLiteralKey = {
+    [aString] = {
+        aNumber = 1
+    }
+}
+
+tableLiteralWithNonLiteralKey = { -- Expect error
+    [aString] = {
+        aNumber = "wrong"
+    },
+}
