@@ -165,3 +165,36 @@ local badAnonymous = {
 
 goodLiteral = goodAnonymous
 goodLiteral = badAnonymous -- Expect error
+
+
+---@shape StringNumberBooleanTuple
+---@field [1] string
+---@field [2] number
+---@field [3] boolean
+
+---@param tuple StringNumberBooleanTuple
+local function testTuple(tuple) end
+
+testTuple({"hi", 1, true})
+testTuple({"hi", 1, 1}) -- Expect error
+
+---@type number[]
+local numberArray
+
+---@shape NumberTuple
+---@field [1] number
+---@field [2] number
+---@field [3] number
+
+---@type NumberTuple
+local numberTuple
+
+numberArray = numberTuple
+
+---@shape NonContiguousNumberTuple : NumberTuple
+---@field [5] number
+
+---@type NonContiguousNumberTuple
+local nonContiguousNumberTuple
+
+numberArray = nonContiguousNumberTuple -- Expect Error

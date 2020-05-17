@@ -143,3 +143,6 @@ tableLiteralWithNonLiteralKey = { -- Expect error
         aNumber = "wrong"
     },
 }
+
+---@type number[]
+local arr = {1, 2, 3, [5]=1} -- Expect error
