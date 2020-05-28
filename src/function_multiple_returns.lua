@@ -8,16 +8,11 @@ local function multipleReturns()
     return 1, res
 end
 
----@type number
-local aNumber
-
----@type ClassWithAField
-local classWithAField
-
 ---@type string
 local aString
 
-aNumber, classWithAField = multipleReturns()
+---@type number, ClassWithAField
+local aNumber, classWithAField = multipleReturns()
 classWithAField, aNumber = multipleReturns() -- Expect error
 aNumber, classWithAField, aString = multipleReturns() -- Expect error
 aNumber = multipleReturns() -- Expect weak warning

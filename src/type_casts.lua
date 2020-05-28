@@ -27,18 +27,15 @@ local aString = "aString"
 wantsArray(aString) -- Type mismatch. Required: 'any[]' Found 'string'
 wantsArray(--[[--- @type any[] ]] aString) -- Trailing space used to separate array ']' from the block comment ']]'.
 
----@class ClassToCast
----@field a string
 
----@type ClassToCast
-local classToCast = --[[---@type ClassToCast]] {
-    a = 1
-}
+local aNumber = 1
 
-classToCast = { -- Expect error
-    a = 1
-}
+---@return number, string
+local function multiReturn()
+    return 1, "a string"
+end
 
-classToCast = --[[---@type ClassToCast]] {
-    a = 1
-}
+aNumber, aString = multiReturn()
+aString, aNumber = multiReturn() -- Expect error
+aString, aNumber = --[[---@type string, number]] multiReturn()
+aString, aNumber = --[[---@type string, string]] multiReturn() -- Expect error
