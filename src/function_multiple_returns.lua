@@ -99,3 +99,20 @@ end
 
 ---@type number[]
 local numberArray = {returns123()}
+
+---@overload fun(f: (fun: void), ...: any): nil|string
+---@generic T
+---@param f fun: T
+---@return string | T
+local function returnStringOrGeneric(f, ...)
+    return aString
+end
+
+local inferredNumberOrString = returnStringOrGeneric(returns123)
+
+numberOrString = inferredNumberOrString
+aNumber = inferredNumberOrString -- Expect error
+
+local hmm = returnStringOrGeneric(function() end)
+
+aString = hmm
