@@ -46,11 +46,18 @@ local aNumber
 ---@type boolean
 local aBoolean
 
+---@type nil | number
+local nilOrNumber
+
+---@type nil | boolean
+local nilOrBoolean
+
 ---@vararg number
 local function varargFunction7(...)
-    aNumber = ...
-    aNumber, aNumber = ...
-    aNumber, aBoolean, aNumber = ... -- Expect error
+    nilOrNumber = ...
+    nilOrNumber, nilOrNumber = ...
+    nilOrBoolean, nilOrBoolean = ... -- Expect error
+    nilOrBoolean, nilOrBoolean = ... -- Expect error
 end
 
 ---@type fun<T>(index: number, vararg T): T
@@ -74,7 +81,7 @@ aBoolean = genericVarargFunction2(1, true, false, true)
 ---@vararg T
 ---@return T
 local function genericVarargFunction3(index, ...)
-    return table.unpack({...}, index, 1)
+    return --[[---@type T]] table.unpack({...}, index, 1)
 end
 
 aNumber = genericVarargFunction3(1, 1, 2, 3)
@@ -169,3 +176,11 @@ overloadMergedStringStringMap.a = "a string"
 overloadMergedStringStringMap.a = 1 -- Expect error
 overloadMergedStringStringMap['a'] = "a string"
 overloadMergedStringStringMap['a'] = 1 -- Expect error
+
+---@return number...
+local returnVarNumber() end
+
+---@vararg number
+local acceptVarNumber(...) end
+
+acceptVarNumber(returnVarNumber())

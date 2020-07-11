@@ -49,12 +49,53 @@ end
 
 ---@return number, string, boolean
 local function returnsNumberStringBoolean()
-    return 1, "a string", true
+    if aNumber == 1 then
+        return 1, "a string", true
+    elseif aNumber == 2 then
+        ---@type string @Expect error
+        return 1, "a string", true -- Expect error
+    else
+        return returnsNumberStringVariadicBoolean() -- Expect error
+    end
 end
 
 acceptsNumberStringVariadicBoolean(1, "a string", true)
 acceptsNumberStringVariadicBoolean(returnsNumberStringVariadicBoolean())
 acceptsNumberStringVariadicBoolean(returnsNumberStringVariadicBoolean(), true) -- Expect error
 acceptsNumberStringVariadicBoolean(1, returnStringVariadicBoolean())
-acceptsNumberString(returnsNumberStringVariadicBoolean()) -- Expect weak warning
+acceptsNumberString(returnsNumberStringVariadicBoolean())
 acceptsNumberString(returnsNumberStringBoolean()) -- Expect weak warning
+
+---@return number, number
+local function returnsNumberNumber()
+    return 0, 0
+end
+
+---@return string, string
+local function returnsStringString()
+    return "a", "a"
+end
+
+local returnsNumberNumberOrStringString = {returnsNumberNumber, returnsStringString}
+
+---@type number | string
+local numberOrString
+
+for _, fun in ipairs(returnsNumberNumberOrStringString) do
+    local numberOrString1, numberOrString2 = fun()
+
+    numberOrString = numberOrString1
+    numberOrString = numberOrString2
+
+    aNumber = numberOrString1 -- Expect error
+    aNumber = numberOrString2 -- Expect error
+end
+
+
+---@return 1, 2, 3
+local function returns123()
+    return 1, 2, 3
+end
+
+---@type number[]
+local numberArray = {returns123()}

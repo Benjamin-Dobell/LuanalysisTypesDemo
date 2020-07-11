@@ -4,13 +4,17 @@ local aNumber
 ---@type boolean
 local aBoolean
 
+---@type nil | number
+local nilOrNumber
+
+---@type nil | boolean
+local nilOrBoolean
+
 ---@type fun(): number, boolean...
 local varreturnFunction
 
-aNumber, aBoolean, aBoolean = varreturnFunction()
-aNumber, aBoolean, aBoolean, aNumber, aBoolean = varreturnFunction() -- Expect error
-
-
+aNumber, nilOrBoolean, nilOrBoolean = varreturnFunction()
+aNumber, nilOrBoolean, nilOrBoolean, nilOrNumber, nilOrBoolean = varreturnFunction() -- Expect error
 
 
 ---@param numberParam number
@@ -25,21 +29,33 @@ local function varreturnFunction2()
     elseif aNumber == 4 then
         return 1, true, false
     else
-        return -- Expect
+        return -- Expect error
     end
 end
 
-aNumber, aBoolean, aBoolean = varreturnFunction2()
-aNumber, aBoolean, aBoolean, aNumber, aBoolean = varreturnFunction2() -- Expect error
+aNumber, nilOrBoolean, nilOrBoolean = varreturnFunction2()
+aNumber, nilOrBoolean, nilOrBoolean, nilOrNumber, nilOrBoolean = varreturnFunction2() -- Expect error
+
+---@param a number
+---@param b string
+local function acceptsNumberString(a, b) end
+
+acceptsNumberString(varreturnFunction2()) -- Expect error
+
+---@param a number
+---@vararg string
+local function acceptsNumberVariadicString(a, ...) end
+
+acceptsNumberVariadicString(varreturnFunction2()) -- Expect error
 
 ---@type fun(): boolean...
 local varreturnFunction3
 
-aBoolean, aBoolean = varreturnFunction3()
-aBoolean, aBoolean, aNumber, aBoolean = varreturnFunction3() -- Expect error
+nilOrBoolean, nilOrBoolean = varreturnFunction3()
+nilOrBoolean, nilOrBoolean, nilOrNumber, nilOrBoolean = varreturnFunction3() -- Expect error
 
 ---@return boolean...
-local function varreturnFunction6()
+local function varreturnFunction4()
     if aNumber == 1 then
         return
     elseif aNumber == 2 then
@@ -51,8 +67,8 @@ local function varreturnFunction6()
     end
 end
 
-aBoolean, aBoolean = varreturnFunction6()
-aBoolean, aBoolean, aNumber, aBoolean = varreturnFunction6() -- Expect error
+nilOrBoolean, nilOrBoolean = varreturnFunction4()
+nilOrBoolean, nilOrBoolean, nilOrNumber, nilOrBoolean = varreturnFunction4() -- Expect error
 
 ---@generic T
 ---@param list T[]
@@ -61,20 +77,12 @@ local function genericVarreturn(list)
     return table.unpack(list)
 end
 
-aNumber, aNumber = genericVarreturn({1, 2})
-aNumber, aBoolean = genericVarreturn({1, 2}) -- Expect error
+nilOrNumber, nilOrNumber = genericVarreturn({1, 2})
+nilOrNumber, nilOrBoolean = genericVarreturn({1, 2}) -- Expect error
 
-local implicitNumber1, implicitNumber2 = genericVarreturn({1, 2})
+local implicitNilOrNumber1, implicitNilOrNumber2 = genericVarreturn({ 1, 2})
 
-aNumber = implicitNumber1
-aBoolean = implicitNumber1 -- Expect error
-aNumber = implicitNumber2
-aBoolean = implicitNumber2 -- Expect error
-
----@return 1, 2, 3
-local function returns123()
-    return 1, 2, 3
-end
-
----@type number[]
-local numberArray = {returns123()}
+nilOrNumber = implicitNilOrNumber1
+nilOrBoolean = implicitNilOrNumber1 -- Expect error
+nilOrNumber = implicitNilOrNumber2
+nilOrBoolean = implicitNilOrNumber2 -- Expect error

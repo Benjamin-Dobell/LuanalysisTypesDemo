@@ -7,6 +7,9 @@ local anyNumber
 ---@type string
 local anyString
 
+---@type boolean
+local anyBoolean
+
 ---@type 1
 local number1
 
@@ -410,3 +413,78 @@ overloadedT("string") -- Expect error
 
 overloadedT(1, 1) -- Expect error
 overloadedT("string", 1)
+
+
+---@generic T
+---@param builder fun(): T
+---@return T
+function build(builder)
+    return builder()
+end
+
+stringNumberTable = build(function()
+    return {a = 1}
+end) -- Expect error
+
+stringNumberTable = build(function()
+    ---@type table<string, number>
+    return {a = 1}
+end)
+
+
+---@type nil | boolean
+local nilOrBoolean
+
+---@type nil | number
+local nilOrNumber
+
+---@type nil | string
+local nilOrString
+
+---@type nil | number | string
+local nilOrNumberOrString
+
+---@return string, number
+local function returnsStringNumber()
+    return "one", 1
+end
+
+---@return number, boolean...
+local function returnsNumberVariadicBoolean()
+    return 1, true, false
+end
+
+local function chainedMultipleResults()
+    return returnsStringNumber(), returnsStringNumber()
+end
+
+---@generic T
+---@param f fun(): T
+---@return boolean, T
+function genericParameterMultipleResults(f, ...)
+    return true, f()
+end
+
+anyBoolean, anyString, anyNumber = genericParameterMultipleResults(returnsStringNumber)
+anyBoolean, anyString, anyString = genericParameterMultipleResults(returnsStringNumber) -- Expect error
+anyBoolean, anyBoolean, anyString, anyNumber = genericParameterMultipleResults(returnsStringNumber), genericParameterMultipleResults(returnsStringNumber)
+
+anyBoolean, anyNumber = genericParameterMultipleResults(returnsNumberVariadicBoolean)
+anyBoolean, anyNumber, nilOrBoolean, nilOrBoolean = genericParameterMultipleResults(returnsNumberVariadicBoolean)
+anyBoolean, anyNumber, nilOrString = genericParameterMultipleResults(returnsNumberVariadicBoolean) -- Expect error
+anyBoolean, anyBoolean, anyNumber, nilOrBoolean, nilOrBoolean = genericParameterMultipleResults(returnsNumberVariadicBoolean), genericParameterMultipleResults(returnsNumberVariadicBoolean)
+anyBoolean, anyBoolean, anyNumber, nilOrBoolean, nilOrString = genericParameterMultipleResults(returnsNumberVariadicBoolean), genericParameterMultipleResults(returnsNumberVariadicBoolean) -- Expect error
+
+anyBoolean, anyString, anyString, anyNumber = genericParameterMultipleResults(chainedMultipleResults)
+anyBoolean, anyString, anyString, anyString = genericParameterMultipleResults(chainedMultipleResults) -- Expect error
+anyBoolean, anyBoolean, anyString, anyString, anyNumber = genericParameterMultipleResults(chainedMultipleResults), genericParameterMultipleResults(chainedMultipleResults)
+
+---@generic T
+---@param f fun(): T
+---@return boolean, T...
+function variadicGenericParameterMultipleResults(f, ...)
+    return true, f(), f(), f()
+end
+
+anyBoolean, nilOrString, nilOrNumberOrString, nilOrNumberOrString = variadicGenericParameterMultipleResults(returnsStringNumber)
+anyBoolean, nilOrString, nilOrNumber = variadicGenericParameterMultipleResults(returnsStringNumber) -- Expect error

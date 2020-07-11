@@ -75,3 +75,43 @@ local oneOrFour
 
 aNumber = vector[oneOrTwo]
 aNumber = vector[oneOrFour] -- Expect error
+
+
+---@alias AOrB 'a' | 'b'
+
+---@type AOrB
+local aOrB
+
+---@shape UnionIndexer
+---@field [AOrB] boolean
+---@field [OneOrTwo] boolean
+---@field [3|4] boolean
+
+---@type UnionIndexer
+local unionIndexer
+
+aBoolean = unionIndexer.a
+aBoolean = unionIndexer['a']
+aBoolean = unionIndexer[aOrB]
+aNumber = unionIndexer.a -- Expect error
+aNumber = unionIndexer['a'] -- Expect error
+
+aBoolean = unionIndexer[1]
+aBoolean = unionIndexer[oneOrTwo]
+aNumber = unionIndexer[1] -- Expect error
+aNumber = unionIndexer[oneOrTwo] -- Expect error
+
+---@alias ThreeOrFour 3|4
+
+---@type 3|4
+local threeOrFour
+
+---@type ThreeOrFour
+local aliasThreeOrFour
+
+aBoolean = unionIndexer[3]
+aBoolean = unionIndexer[threeOrFour]
+aBoolean = unionIndexer[aliasThreeOrFour]
+aNumber = unionIndexer[3] -- Expect error
+aNumber = unionIndexer[threeOrFour] -- Expect error
+aNumber = unionIndexer[aliasThreeOrFour] -- Expect error

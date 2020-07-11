@@ -102,7 +102,7 @@ local nestedShape3 = {
 }
 
 ---@return NestedShape
-local function returnNestedSahpe()
+local function returnNestedShape()
     return {
         shape1 = {a = {}}, -- Expect error
         shape2 = {a = aNumber, b = aNumber} -- Expect error
@@ -147,26 +147,6 @@ local badLiteral = {
     }
 }
 
-local goodAnonymous = {
-    values = {
-        {
-            a = 1
-        }
-    }
-}
-
-local badAnonymous = {
-    values = {
-        {
-            a = "some string"
-        }
-    }
-}
-
-goodLiteral = goodAnonymous
-goodLiteral = badAnonymous -- Expect error
-
-
 ---@shape StringNumberBooleanTuple
 ---@field [1] string
 ---@field [2] number
@@ -198,3 +178,19 @@ numberArray = numberTuple
 local nonContiguousNumberTuple
 
 numberArray = nonContiguousNumberTuple -- Expect Error
+
+
+---@shape PrimitiveAndTable
+---@field primitiveField string
+---@field tableField {}
+
+---@type PrimitiveAndTable
+local primitiveAndTable = {
+    primitiveField = "a string",
+    tableField = {}
+}
+
+primitiveAndTable = {
+    primitiveField = 1, -- Expect error
+    tableField = {}
+}
