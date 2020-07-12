@@ -61,3 +61,56 @@ aNumber, aNumber = --[[---@not string, string]] multiReturn2(true)
 aNumber, aString = --[[---@not string, number]] multiReturn2(true)
 aNumber = multiReturn2(true) -- Expect error
 aNumber = --[[---@not string]] multiReturn2(true)
+
+
+---@type number[]
+local numberArray
+
+local a, b, c = --[[---@not nil, nil, nil]] table.unpack(numberArray, 1, 3)
+
+aNumber = a
+aNumber = b
+aNumber = c
+
+aString = a -- Expect error
+aString = b -- Expect error
+aString = c -- Expect error
+
+---@type (number | string)[]
+local stringOrNumberArray
+
+local d, e, f = --[[---@not nil | number, nil | number, nil | number]] table.unpack(stringOrNumberArray, 1, 3)
+
+aNumber = d -- Expect error
+aNumber = e -- Expect error
+aNumber = f -- Expect error
+
+aString = d
+aString = e
+aString = f
+
+---@type nil | number
+local nilOrNumber
+
+local g, h, i = --[[---@not string...]] table.unpack(stringOrNumberArray, 1, 3)
+
+nilOrNumber = g
+nilOrNumber = h
+nilOrNumber = i
+
+aNumber = g -- Expect error
+aNumber = h -- Expect error
+aNumber = i -- Expect error
+
+---@type nil | string
+local nilOrString
+
+local j, k, l = --[[---@type string...]] table.unpack(stringOrNumberArray, 1, 3)
+
+nilOrNumber = j -- Expect error
+nilOrNumber = k -- Expect error
+nilOrNumber = l -- Expect error
+
+nilOrString = j
+nilOrString = k
+nilOrString = l

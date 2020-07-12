@@ -112,7 +112,3 @@ local inferredNumberOrString = returnStringOrGeneric(returns123)
 
 numberOrString = inferredNumberOrString
 aNumber = inferredNumberOrString -- Expect error
-
-local hmm = returnStringOrGeneric(function() end)
-
-aString = hmm
