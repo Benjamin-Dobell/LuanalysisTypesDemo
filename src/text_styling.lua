@@ -3,19 +3,43 @@ tab = {hi = 2}
 for i, v in ipairs(--[[---@type any]] tab.hi) do
 end
 
-local upval = {}
+local localVar = {}
 
-function moo()
-    ipairs(--[[---@type any]] upval)
+function localVar:add(a, b)
+    return a + b
 end
 
+function moo()
+    return localVar
+end
+
+---@type function
+local myThing
+
+---@type any
+local aAny
+
+myThing = aAny
+
 shallow = {1, function(a) end, 3}
-deep = {indeed = {hi = {1, 2, 3}}}
+
+deep = {
+    indeed = {
+        hi = {1, 2, 3}
+    }
+}
 
 ---@return boolean
 function moo2()
-    local innerMoo = 'indeed'
-    moo():blarg(123123)
-    ipairs(--[[---@type any]] deep[--[[---@type string]] innerMoo].hi[1])
+    moo():add(123, 0.4)
+
+    ---@type nil | 'indeed'
+    local nilOrIndeed = 'indeed'
+
+    local aNumber = deep.indeed['hi'][1]
+    
+    nonExistent.soWhat()
+
+    ipairs(deep[--[[---@not nil]] nilOrIndeed].hi)
     return true
 end
